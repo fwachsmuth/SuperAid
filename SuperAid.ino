@@ -1,7 +1,14 @@
 #include <FreqMeasure.h>
+#include <Arduino.h>    // Why?
+#include <U8g2lib.h>
+#include <Wire.h>
+
+U8G2_SSD1306_128X64_NONAME_1_HW_I2C u8g2(U8G2_R0, /* reset=*/U8X8_PIN_NONE);
+
 
 #define isr_pin 2
 #define light_meter A0
+
 
 double sum = 0;
 int count = 0;
@@ -20,6 +27,8 @@ void duty_cycle_ISR()
 
 void setup()
 {
+    // u8g2.begin();
+    
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(isr_pin, INPUT);
     pinMode(light_meter, INPUT);
@@ -65,6 +74,17 @@ void loop()
             Serial.print(360 * low_micros / cycle_micros);
             Serial.println("°");
             Serial.println("----------------");
+
+            // do
+            // {
+            //     u8g2.setFont(u8g2_font_ncenB08_tr);
+            //     u8g2.setCursor(0, 15);
+            //     u8g2.println("Shutter Speed:");
+            //     u8g2.setCursor(0, 30);
+            //     u8g2.print("1/");
+            //     u8g2.print(1000000 / low_micros);
+            //     u8g2.println("  ");
+            // } while (u8g2.nextPage());
 
             shutter_cycle_micros_start = micros_now;
         }
